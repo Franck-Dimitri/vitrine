@@ -1,6 +1,45 @@
 import { useEffect, useState, useRef } from 'react';
 import { TrendingUp, ShieldCheck, Globe, Users } from 'lucide-react';
 
+function CountUpNumber({ end, isVisible, duration = 1600 }) {
+    const [count, setCount] = useState(0);
+    const target = parseInt(end, 10) || 0;
+
+    useEffect(() => {
+        if (!isVisible) {
+            setCount(0);
+            return;
+        }
+
+        let startTimestamp = null;
+        let animationFrameId = null;
+
+        const step = (timestamp) => {
+            if (!startTimestamp) startTimestamp = timestamp;
+            const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+            // Ease out cubic
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.floor(easeOut * target));
+
+            if (progress < 1) {
+                animationFrameId = window.requestAnimationFrame(step);
+            } else {
+                setCount(target);
+            }
+        };
+
+        animationFrameId = window.requestAnimationFrame(step);
+
+        return () => {
+            if (animationFrameId) {
+                window.cancelAnimationFrame(animationFrameId);
+            }
+        };
+    }, [isVisible, target, duration]);
+
+    return <span>{count}</span>;
+}
+
 export default function StatsCounter({ stats = [] }) {
     const [isVisible, setIsVisible] = useState(false);
     const sectionRef = useRef(null);
@@ -12,7 +51,7 @@ export default function StatsCounter({ stats = [] }) {
                     setIsVisible(true);
                 }
             },
-            { threshold: 0.2 }
+            { threshold: 0.25 }
         );
 
         if (sectionRef.current) {
@@ -21,13 +60,6 @@ export default function StatsCounter({ stats = [] }) {
 
         return () => observer.disconnect();
     }, []);
-
-    const icons = [
-        <Layers className="w-5 h-5 text-[#00D084]" />,
-        <Users className="w-5 h-5 text-[#00D084]" />,
-        <ShieldCheck className="w-5 h-5 text-[#00D084]" />,
-        <Globe className="w-5 h-5 text-[#00D084]" />,
-    ];
 
     return (
         <section id="stats" ref={sectionRef} className="relative z-10 w-full px-6 sm:px-10 lg:px-14 xl:px-16 py-20 lg:py-28">
@@ -64,17 +96,19 @@ export default function StatsCounter({ stats = [] }) {
                         </div>
 
                         <div>
-                            {/* Animated Value Display */}
+                            {/* Animated Numeric Counter Display */}
                             <div className="font-display text-5xl sm:text-6xl font-light dark:text-white text-slate-900 tracking-tight mb-2 flex items-baseline">
-                                <span className="text-[#00D084] font-normal text-3xl sm:text-4xl mr-1">
-                                    {stat.prefix}
-                                </span>
-                                <span className={isVisible ? 'animate-fadeIn' : 'opacity-80'}>
-                                    {stat.value}
-                                </span>
-                                <span className="text-[#00D084] font-normal text-3xl sm:text-4xl ml-0.5">
-                                    {stat.suffix}
-                                </span>
+                                {stat.prefix && (
+                                    <span className="text-[#00D084] font-normal text-3xl sm:text-4xl mr-1">
+                                        {stat.prefix}
+                                    </span>
+                                )}
+                                <CountUpNumber end={stat.value} isVisible={isVisible} />
+                                {stat.suffix && (
+                                    <span className="text-[#00D084] font-normal text-3xl sm:text-4xl ml-0.5">
+                                        {stat.suffix}
+                                    </span>
+                                )}
                             </div>
 
                             <h3 className="font-display font-semibold text-base dark:text-slate-200 text-slate-800 group-hover:text-[#00D084] transition-colors">
@@ -88,23 +122,5 @@ export default function StatsCounter({ stats = [] }) {
                 ))}
             </div>
         </section>
-    );
-}
-
-function Layers(props) {
-    return (
-        <svg
-            {...props}
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        >
-            <polygon points="12 2 2 7 12 12 22 7 12 2" />
-            <polyline points="2 17 12 22 22 17" />
-            <polyline points="2 12 12 17 22 12" />
-        </svg>
     );
 }

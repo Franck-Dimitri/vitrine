@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { X, Play, Volume2, VolumeX, Sparkles } from 'lucide-react';
+import { X, Volume2, VolumeX, Sparkles } from 'lucide-react';
 
 export default function VideoModal({ isOpen, onClose }) {
     const [isMuted, setIsMuted] = useState(true);
@@ -34,8 +34,8 @@ export default function VideoModal({ isOpen, onClose }) {
                 onClick={onClose}
             />
 
-            {/* Modal Dialog */}
-            <div className="relative z-10 w-full max-w-5xl rounded-3xl bg-[#0B132B] border border-slate-700/80 shadow-2xl overflow-hidden shadow-black flex flex-col">
+            {/* Modal Dialog with refined architectural radius */}
+            <div className="relative z-10 w-full max-w-5xl rounded-lg sm:rounded-xl bg-[#0B132B] border border-slate-700/80 shadow-2xl overflow-hidden shadow-black flex flex-col">
                 {/* Header Bar */}
                 <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#080D1A]/60">
                     <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
@@ -47,15 +47,17 @@ export default function VideoModal({ isOpen, onClose }) {
 
                     <div className="flex items-center gap-3">
                         <button
+                            type="button"
                             onClick={() => setIsMuted(!isMuted)}
-                            className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition"
+                            className="p-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition cursor-pointer"
                             title={isMuted ? 'Activer le son' : 'Couper le son'}
                         >
                             {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
                         </button>
                         <button
+                            type="button"
                             onClick={onClose}
-                            className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition"
+                            className="p-2 rounded-md bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white transition cursor-pointer"
                             title="Fermer"
                         >
                             <X className="w-4 h-4" />
@@ -74,7 +76,6 @@ export default function VideoModal({ isOpen, onClose }) {
                         className="w-full h-full object-cover"
                         poster="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1200&q=80"
                     >
-                        {/* Sample high-quality stream/video asset */}
                         <source
                             src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
                             type="video/mp4"
@@ -82,13 +83,13 @@ export default function VideoModal({ isOpen, onClose }) {
                     </video>
 
                     {/* Cinematic Overlay Banner */}
-                    <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-[#080D1A]/80 backdrop-blur-md border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pointer-events-none">
+                    <div className="absolute bottom-6 left-6 right-6 p-4 rounded-lg bg-[#080D1A]/85 backdrop-blur-md border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3 pointer-events-none">
                         <div>
                             <div className="text-xs font-mono text-[#00D084] uppercase tracking-wider mb-0.5 flex items-center gap-1.5">
                                 <Sparkles className="w-3 h-3" />
                                 Bâtisseur d'Écosystèmes
                             </div>
-                            <h3 className="font-display font-bold text-sm sm:text-base text-white">
+                            <h3 className="font-display font-light text-sm sm:text-base text-white">
                                 « Nous construisons des vitrines. Nous créons des écosystèmes. »
                             </h3>
                         </div>

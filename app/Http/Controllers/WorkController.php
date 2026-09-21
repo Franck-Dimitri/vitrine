@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class HomeController extends Controller
+class WorkController extends Controller
 {
     /**
-     * Display the official landing page for Vitrine Consulting SARL (Module 1).
+     * Display the Work / Ecosystems Hub page (CdCF 3.0).
      */
     public function index(): Response
     {
@@ -108,7 +107,7 @@ class HomeController extends Controller
                 'description' => 'Le hub de confiance reliant les talents indépendants, prestataires de services qualifiés et entreprises à la recherche de compétences fiables.',
                 'target' => 'Artisans, experts, freelances, TPE/PME en quête de prestataires',
                 'metric' => '+3 200 Prestataires certifiés',
-                'category' => 'B2B/B2C',
+                'category' => 'B2B',
                 'year' => '2023',
                 'badge' => 'Réseau Artisans & Pro',
                 'accent' => '#00D084',
@@ -153,131 +152,14 @@ class HomeController extends Controller
             ],
         ];
 
-        /** @var array<int, array<string, string>> $stats */
-        $stats = [
-            [
-                'value' => '8',
-                'prefix' => '+',
-                'suffix' => '',
-                'label' => 'Écosystèmes Actifs',
-                'sublabel' => 'Marques & filiales autonomes',
-            ],
-            [
-                'value' => '500',
-                'prefix' => '+',
-                'suffix' => 'K',
-                'label' => 'Utilisateurs & Audiences',
-                'sublabel' => 'Communautés captives touchées',
-            ],
-            [
-                'value' => '50',
-                'prefix' => '+',
-                'suffix' => '',
-                'label' => 'Partenaires Stratégiques',
-                'sublabel' => 'Télécoms, Banques, Énergies',
-            ],
-            [
-                'value' => '100',
-                'prefix' => '',
-                'suffix' => '%',
-                'label' => 'Ancrage Panafricain',
-                'sublabel' => 'Siège à Akwa, Douala (Cameroun)',
-            ],
-        ];
-
-        /** @var array<int, array<string, string>> $services */
-        $services = [
-            [
-                'title' => 'Stratégie & Conseil',
-                'summary' => 'Audits opérationnels, business modeling digital et plans de transformation à fort impact.',
-                'badge' => 'Gouvernance',
-            ],
-            [
-                'title' => 'Développement Web & Mobile',
-                'summary' => 'Architectures sur mesure (SaaS, applications mobiles natives/hybrides, API haute disponibilité).',
-                'badge' => 'Ingénierie',
-            ],
-            [
-                'title' => 'Marketing & Communication',
-                'summary' => 'Gestion de réputation, acquisition omnicanale, social media et activations de notoriété.',
-                'badge' => 'Influence',
-            ],
-            [
-                'title' => 'Production Média & Contenus',
-                'summary' => 'Tournage vidéo 4K, réalisation de spots institutionnels, reportages et motion design.',
-                'badge' => 'Création',
-            ],
-            [
-                'title' => 'Régie Publicitaire (Vitrine Ads)',
-                'summary' => 'Monétisation d\'inventaires, campagnes display ciblées, parrainages et street marketing.',
-                'badge' => 'Monétisation',
-            ],
-            [
-                'title' => 'Conseil & Formation',
-                'summary' => 'Programmes certifiants, ateliers intra-entreprises et upskilling des équipes marketing/tech.',
-                'badge' => 'Académie',
-            ],
-        ];
-
-        /** @var array<int, array<string, string>> $partners */
-        $partners = [
-            ['name' => 'MTN Cameroon', 'sector' => 'Télécoms', 'country' => 'Cameroun'],
-            ['name' => 'Orange Middle East & Africa', 'sector' => 'Télécoms', 'country' => 'Afrique'],
-            ['name' => 'United Bank for Africa (UBA)', 'sector' => 'Banque & Finance', 'country' => 'Panafricain'],
-            ['name' => 'Société Générale Cameroun', 'sector' => 'Banque', 'country' => 'Cameroun'],
-            ['name' => 'Eneo Cameroon', 'sector' => 'Énergie', 'country' => 'Cameroun'],
-            ['name' => 'TotalEnergies', 'sector' => 'Énergie & Mobilité', 'country' => 'International'],
-            ['name' => 'Canal+ Afrique', 'sector' => 'Médias & Broadcast', 'country' => 'Afrique'],
-            ['name' => 'Afriland First Bank', 'sector' => 'Banque', 'country' => 'Cameroun'],
-            ['name' => 'Dangote Group', 'sector' => 'Industrie', 'country' => 'Panafricain'],
-            ['name' => 'Activa Assurances', 'sector' => 'Assurance', 'country' => 'Afrique'],
-        ];
-
-        /** @var array<int, array<string, mixed>> $news */
-        $news = [
-            [
-                'id' => 'transition-numerique-afrique',
-                'title' => "L'Afrique centrale accélère sa transition numérique : Vitrine Consulting structure son pôle d'ingénierie",
-                'summary' => "Entre souveraineté des données, plateformes d'engagement et régie unifiée, retour sur le déploiement opérationnel des 8 filiales à Douala et Yaoundé.",
-                'category' => 'PRESSE',
-                'date' => 'Lun 15 Sep',
-                'image' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80',
-                'featured' => true,
-            ],
-            [
-                'id' => 'sabes-numerik-banque',
-                'title' => 'Sabes Numerik déploie une infrastructure cloud haute disponibilité pour le secteur bancaire',
-                'summary' => 'Une architecture robuste garantissant 99.98% d\'uptime applicatif pour les services financiers.',
-                'category' => 'TECH',
-                'date' => 'Jeu 10 Sep',
-                'image' => 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
-                'featured' => false,
-            ],
-            [
-                'id' => 'cabougeou-billetterie',
-                'title' => 'CaBougeOu franchit le cap des 180k participants connectés et lance sa billetterie mobile',
-                'summary' => 'La plateforme de référence pour les sorties culturelles connecte désormais les plus grands festivals urbains.',
-                'category' => 'LOISIRS',
-                'date' => 'Mar 25 Août',
-                'image' => 'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=800&q=80',
-                'featured' => false,
-            ],
-        ];
-
-        return Inertia::render('Welcome', [
-            'canLogin' => Route::has('login'),
-            'canRegister' => Route::has('register'),
+        return Inertia::render('Work', [
             'ecosystems' => $ecosystems,
-            'stats' => $stats,
-            'services' => $services,
-            'partners' => $partners,
-            'news' => $news,
+            'categories' => ['Tous', 'Tech', 'Média', 'Food', 'Éducation', 'B2B', 'Impact', 'Loisirs', 'Régie'],
             'company' => [
                 'name' => 'Vitrine Consulting SARL',
                 'legalForm' => 'SARL',
                 'location' => 'Douala (Akwa), Cameroun',
                 'tagline' => 'Nous construisons des vitrines. Nous créons des écosystèmes.',
-                'mission' => 'Donner de la visibilité aux idées, aux marques et aux opportunités.',
                 'phone' => '+237 600 00 00 00',
                 'email' => 'contact@vitrineconsulting.com',
                 'whatsapp' => '237690000000',

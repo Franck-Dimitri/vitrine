@@ -6,9 +6,11 @@ import KotoHero from '@/Components/KotoHero';
 import KotoEcosystems from '@/Components/KotoEcosystems';
 import StatsCounter from '@/Components/StatsCounter';
 import BivalentAndServices from '@/Components/BivalentAndServices';
+import KotoNews from '@/Components/KotoNews';
 import PartnersMarquee from '@/Components/PartnersMarquee';
 import Footer from '@/Components/Footer';
 import EcosystemDetailModal from '@/Components/EcosystemDetailModal';
+import VideoModal from '@/Components/VideoModal';
 
 export default function Welcome({
     auth,
@@ -16,10 +18,12 @@ export default function Welcome({
     stats = [],
     services = [],
     partners = [],
+    news = [],
     company = {},
 }) {
     const { theme, toggleTheme, isDark } = useTheme();
     const [selectedEcosystem, setSelectedEcosystem] = useState(null);
+    const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
 
     // Schema.org JSON-LD Corporate Metadata for Vitrine Consulting SARL
     const jsonLd = {
@@ -88,8 +92,11 @@ export default function Welcome({
                     isDark={isDark}
                 />
 
-                {/* 1. Koto-Style Fullscreen Visual Hero */}
-                <KotoHero isDark={isDark} />
+                {/* 1. Koto-Style Fullscreen Visual Hero with Showreel Trigger */}
+                <KotoHero
+                    isDark={isDark}
+                    onOpenVideoModal={() => setIsVideoModalOpen(true)}
+                />
 
                 <main>
                     {/* 2. Editorial 8 Ecosystems Portfolio (Koto-style large visual cards) */}
@@ -98,23 +105,32 @@ export default function Welcome({
                         onSelectEcosystem={(eco) => setSelectedEcosystem(eco)}
                     />
 
-                    {/* 3. Consolidated Group Performance Metrics */}
+                    {/* 3. Consolidated Group Performance Metrics (Animated Count-Up) */}
                     <StatsCounter stats={stats} />
 
                     {/* 4. Bivalent Organizational Architecture & 6 Transverse Services */}
                     <BivalentAndServices services={services} />
 
-                    {/* 5. Institutional Partners & Social Proofs (Infinite Marquee) */}
+                    {/* 5. Editorial News & Press (Matching Capture 1: Studio News) */}
+                    <KotoNews news={news} />
+
+                    {/* 6. Institutional Partners & Social Proofs (Infinite Marquee) */}
                     <PartnersMarquee partners={partners} />
                 </main>
 
-                {/* 6. Corporate Footer & Direct WhatsApp Link */}
+                {/* 7. Corporate Footer (Matching Capture 2: Contact & Studio card) */}
                 <Footer company={company} />
 
-                {/* 7. Ecosystem Detail Modal */}
+                {/* 8. Ecosystem Detail Modal */}
                 <EcosystemDetailModal
                     ecosystem={selectedEcosystem}
                     onClose={() => setSelectedEcosystem(null)}
+                />
+
+                {/* 9. Fullscreen Corporate Showreel Video Modal */}
+                <VideoModal
+                    isOpen={isVideoModalOpen}
+                    onClose={() => setIsVideoModalOpen(false)}
                 />
             </div>
         </>

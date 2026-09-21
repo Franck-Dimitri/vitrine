@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from '@inertiajs/react';
 import { Sun, Moon, Plus, Minus } from 'lucide-react';
 
 export default function KotoNavbar({ theme, toggleTheme, isDark }) {
@@ -31,7 +32,7 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                 setIsScrolled(false);
             }
 
-            // Determine active section name for the pill label
+            // Determine active section name for the pill label if on homepage
             const ecoSection = document.getElementById('ecosystems');
             const orgSection = document.getElementById('organisation');
             const statsSection = document.getElementById('stats');
@@ -44,9 +45,18 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
             } else if (orgSection && orgSection.getBoundingClientRect().top <= 300) {
                 setActiveSection('ORGANISATION');
             } else if (ecoSection && ecoSection.getBoundingClientRect().top <= 300) {
-                setActiveSection('ÉCOSYSTÈMES');
+                setActiveSection('WORK');
             } else {
-                setActiveSection('HOME');
+                // Check pathname for other pages
+                if (window.location.pathname === '/about') {
+                    setActiveSection('ABOUT');
+                } else if (window.location.pathname === '/work') {
+                    setActiveSection('WORK');
+                } else if (window.location.pathname === '/careers') {
+                    setActiveSection('CARRIÈRES');
+                } else {
+                    setActiveSection('HOME');
+                }
             }
         };
 
@@ -80,17 +90,27 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
         { name: 'VITRINE ADS', id: 'eco-vitrine-ads' },
     ];
 
-    const scrollToSection = (id) => {
+    const navItems = [
+        { href: '/work', label: 'Work', isPage: true },
+        { href: '/about', label: 'About', isPage: true },
+        { href: '/#services', label: 'Services', isPage: false },
+        { href: '/careers', label: 'Carrières', isPage: true },
+        { href: '/#contact', label: 'Contact', isPage: false },
+    ];
+
+    const handleSubClick = (id) => {
         setIsMenuOpen(false);
         const target = document.getElementById(id);
         if (target) {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            window.location.href = `/work#${id}`;
         }
     };
 
     return (
         <>
-            {/* 1. TOP-LEVEL FULL NAVBAR (Visible when at the very top of Hero) */}
+            {/* 1. TOP-LEVEL FULL NAVBAR (Visible when at the very top) */}
             <header
                 className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 pointer-events-none ${
                     isScrolled
@@ -101,27 +121,31 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                 <div className="w-full flex items-center justify-between pointer-events-auto">
                     {/* Left: Brand Logo & Links */}
                     <div className="flex items-center gap-8 sm:gap-12">
-                        <a href="#" className="flex items-center gap-2 group">
+                        <Link href="/" className="flex items-center gap-2 group">
                             <span className="font-display font-extrabold text-2xl sm:text-3xl tracking-tighter text-[#00D084] group-hover:scale-105 transition-transform duration-300">
                                 Vitrine
                             </span>
-                        </a>
+                        </Link>
 
                         <nav className="hidden md:flex items-center gap-7 lg:gap-9 text-[11px] font-mono uppercase tracking-widest">
-                            {[
-                                { href: '#ecosystems', label: 'Écosystèmes' },
-                                { href: '#organisation', label: 'Organisation' },
-                                { href: '#stats', label: 'Chiffres' },
-                                { href: '#services', label: 'Services' },
-                                { href: '#contact', label: 'Contact' },
-                            ].map((link, idx) => (
-                                <a
-                                    key={idx}
-                                    href={link.href}
-                                    className="dark:text-white/80 text-slate-800/80 hover:text-black dark:hover:text-[#00D084] transition-colors duration-200"
-                                >
-                                    {link.label}
-                                </a>
+                            {navItems.map((item, idx) => (
+                                item.isPage ? (
+                                    <Link
+                                        key={idx}
+                                        href={item.href}
+                                        className="dark:text-white/80 text-slate-800/80 hover:text-black dark:hover:text-[#00D084] transition-colors duration-200"
+                                    >
+                                        {item.label}
+                                    </Link>
+                                ) : (
+                                    <a
+                                        key={idx}
+                                        href={item.href}
+                                        className="dark:text-white/80 text-slate-800/80 hover:text-black dark:hover:text-[#00D084] transition-colors duration-200"
+                                    >
+                                        {item.label}
+                                    </a>
+                                )
                             ))}
                         </nav>
                     </div>
@@ -152,6 +176,7 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                         </button>
 
                         <div
+                            onClick={() => setIsMenuOpen(true)}
                             className="grid grid-cols-2 gap-1 w-3.5 h-3.5 opacity-80 hover:opacity-100 transition-opacity cursor-pointer"
                             title="Menu complet"
                         >
@@ -164,7 +189,7 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                 </div>
             </header>
 
-            {/* 2. KOTO FLOATING PILL MENU ON SCROLL (Exact match of User's Image 1 & Image 2) */}
+            {/* 2. KOTO FLOATING PILL MENU ON SCROLL */}
             <div
                 ref={menuRef}
                 className={`fixed top-6 left-6 sm:top-8 sm:left-10 z-50 transition-all duration-300 select-none ${
@@ -174,7 +199,7 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                 }`}
             >
                 {!isMenuOpen ? (
-                    /* COLLAPSED STATE (Image 1): [ Vitrine  HOME  + ] */
+                    /* COLLAPSED STATE: [ Vitrine  SECTION  + ] */
                     <button
                         type="button"
                         onClick={() => setIsMenuOpen(true)}
@@ -191,16 +216,20 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                         </div>
                     </button>
                 ) : (
-                    /* EXPANDED DROPDOWN MENU STATE (Image 2) */
+                    /* EXPANDED DROPDOWN MENU STATE */
                     <div className="w-64 sm:w-72 rounded-lg dark:bg-[#111317]/98 bg-white/98 backdrop-blur-2xl border dark:border-white/10 border-slate-900/10 shadow-2xl p-5 flex flex-col gap-6 animate-fadeIn">
                         {/* Top Header inside menu */}
                         <div className="flex items-center justify-between pb-3 border-b dark:border-white/10 border-slate-200">
                             <div className="flex items-center gap-3">
-                                <span className="font-display font-black text-sm sm:text-base tracking-tighter text-[#00D084]">
+                                <Link
+                                    href="/"
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="font-display font-black text-sm sm:text-base tracking-tighter text-[#00D084]"
+                                >
                                     Vitrine
-                                </span>
+                                </Link>
                                 <span className="font-mono text-xs font-semibold dark:text-white/80 text-slate-700 tracking-wider">
-                                    HOME
+                                    MENU
                                 </span>
                             </div>
                             <button
@@ -215,28 +244,36 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
 
                         {/* Main Navigation Pages */}
                         <nav className="flex flex-col gap-3 font-display text-base sm:text-lg font-light dark:text-white text-slate-900">
-                            {[
-                                { label: 'Écosystèmes', id: 'ecosystems' },
-                                { label: 'Organisation', id: 'organisation' },
-                                { label: 'Chiffres Clés', id: 'stats' },
-                                { label: 'Services Transverses', id: 'services' },
-                                { label: 'Contact & Siège', id: 'contact' },
-                            ].map((item) => (
-                                <button
-                                    key={item.id}
-                                    type="button"
-                                    onClick={() => scrollToSection(item.id)}
-                                    className="text-left hover:text-[#00D084] transition-colors flex items-center justify-between group cursor-pointer"
-                                >
-                                    <span>{item.label}</span>
-                                    <span className="text-xs font-mono opacity-0 group-hover:opacity-100 text-[#00D084] transition-opacity">
-                                        →
-                                    </span>
-                                </button>
+                            {navItems.map((item, idx) => (
+                                item.isPage ? (
+                                    <Link
+                                        key={idx}
+                                        href={item.href}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="text-left hover:text-[#00D084] transition-colors flex items-center justify-between group cursor-pointer"
+                                    >
+                                        <span>{item.label}</span>
+                                        <span className="text-xs font-mono opacity-0 group-hover:opacity-100 text-[#00D084] transition-opacity">
+                                            →
+                                        </span>
+                                    </Link>
+                                ) : (
+                                    <a
+                                        key={idx}
+                                        href={item.href}
+                                        onClick={() => setIsMenuOpen(false)}
+                                        className="text-left hover:text-[#00D084] transition-colors flex items-center justify-between group cursor-pointer"
+                                    >
+                                        <span>{item.label}</span>
+                                        <span className="text-xs font-mono opacity-0 group-hover:opacity-100 text-[#00D084] transition-opacity">
+                                            →
+                                        </span>
+                                    </a>
+                                )
                             ))}
                         </nav>
 
-                        {/* Channels / Subsidiaries Sub-list (Image 2 layout) */}
+                        {/* Channels / Subsidiaries Sub-list */}
                         <div className="pt-2 border-t dark:border-white/10 border-slate-200">
                             <span className="text-[10px] font-mono uppercase tracking-[0.2em] dark:text-slate-400 text-slate-500 font-bold block mb-2.5">
                                 CHANNELS & FILIALES
@@ -246,7 +283,7 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                                     <button
                                         key={sub.id}
                                         type="button"
-                                        onClick={() => scrollToSection(sub.id)}
+                                        onClick={() => handleSubClick(sub.id)}
                                         className="text-left hover:text-[#00D084] transition-colors py-0.5 cursor-pointer"
                                     >
                                         {sub.name}
@@ -258,7 +295,7 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                 )}
             </div>
 
-            {/* 3. FLOATING TOP-RIGHT UTILITY PILL ON SCROLL (Douala time, Mode toggle, dots) */}
+            {/* 3. FLOATING TOP-RIGHT UTILITY PILL ON SCROLL */}
             <div
                 className={`fixed top-6 right-6 sm:top-8 sm:right-10 z-50 transition-all duration-300 select-none ${
                     isScrolled
@@ -267,12 +304,10 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                 }`}
             >
                 <div className="rounded-lg dark:bg-[#111317]/95 bg-white/95 backdrop-blur-md border dark:border-white/10 border-slate-900/10 shadow-2xl px-3.5 py-2 flex items-center gap-3 font-mono text-xs">
-                    {/* Time */}
                     <span className="dark:text-white/80 text-slate-700 hidden sm:inline-block text-[11px]">
                         {timeString || '20:45 UTC+1'}
                     </span>
 
-                    {/* Dark/Light Toggle */}
                     <button
                         type="button"
                         onClick={toggleTheme}
@@ -286,8 +321,11 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                         )}
                     </button>
 
-                    {/* 4 dots */}
-                    <div className="grid grid-cols-2 gap-0.5 w-2.5 h-2.5 opacity-70">
+                    <div
+                        onClick={() => setIsMenuOpen(true)}
+                        className="grid grid-cols-2 gap-0.5 w-2.5 h-2.5 opacity-70 hover:opacity-100 cursor-pointer"
+                        title="Ouvrir le menu"
+                    >
                         <span className="w-1 h-1 rounded-sm dark:bg-white bg-slate-900" />
                         <span className="w-1 h-1 rounded-sm dark:bg-white bg-slate-900" />
                         <span className="w-1 h-1 rounded-sm dark:bg-white bg-slate-900" />

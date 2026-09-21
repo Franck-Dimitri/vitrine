@@ -21,6 +21,7 @@ class HomeTest extends TestCase
             ->has('stats', 4)
             ->has('services', 6)
             ->has('partners')
+            ->has('news', 3)
             ->has('company')
             ->where('company.name', 'Vitrine Consulting SARL')
             ->where('ecosystems.0.name', 'CaBougeOu')
