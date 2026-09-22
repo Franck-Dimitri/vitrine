@@ -5,7 +5,7 @@ import KotoNavbar from '@/Components/KotoNavbar';
 import KotoHero from '@/Components/KotoHero';
 import KotoEcosystems from '@/Components/KotoEcosystems';
 import StatsCounter from '@/Components/StatsCounter';
-import BivalentAndServices from '@/Components/BivalentAndServices';
+import BivalentSection from '@/Components/BivalentSection';
 import KotoNews from '@/Components/KotoNews';
 import PartnersMarquee from '@/Components/PartnersMarquee';
 import Footer from '@/Components/Footer';
@@ -108,8 +108,8 @@ export default function Welcome({
                     {/* 3. Consolidated Group Performance Metrics (Animated Count-Up) */}
                     <StatsCounter stats={stats} />
 
-                    {/* 4. Bivalent Organizational Architecture & 6 Transverse Services */}
-                    <BivalentAndServices services={services} />
+                    {/* 4. Bivalent Organizational Architecture (Holding vs Filiales) */}
+                    <BivalentSection />
 
                     {/* 5. Editorial News & Press (Matching Capture 1: Studio News) */}
                     <KotoNews news={news} />

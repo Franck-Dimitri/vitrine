@@ -52,6 +52,8 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
                     setActiveSection('ABOUT');
                 } else if (window.location.pathname === '/work') {
                     setActiveSection('WORK');
+                } else if (window.location.pathname === '/services') {
+                    setActiveSection('SERVICES');
                 } else if (window.location.pathname === '/careers') {
                     setActiveSection('CARRIÈRES');
                 } else {
@@ -93,7 +95,7 @@ export default function KotoNavbar({ theme, toggleTheme, isDark }) {
     const navItems = [
         { href: '/work', label: 'Work', isPage: true },
         { href: '/about', label: 'About', isPage: true },
-        { href: '/#services', label: 'Services', isPage: false },
+        { href: '/services', label: 'Services', isPage: true },
         { href: '/careers', label: 'Carrières', isPage: true },
         { href: '/#contact', label: 'Contact', isPage: false },
     ];

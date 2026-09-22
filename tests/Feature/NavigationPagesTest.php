@@ -53,4 +53,21 @@ class NavigationPagesTest extends TestCase
             ->has('company')
         );
     }
+
+    /**
+     * Test that the /services page loads with Inertia props.
+     */
+    public function test_services_page_returns_successful_response(): void
+    {
+        $response = $this->get(route('services'));
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn ($page) => $page
+            ->component('Services')
+            ->has('disciplines', 5)
+            ->has('partners', 10)
+            ->has('testimonials', 2)
+            ->has('company')
+        );
+    }
 }
